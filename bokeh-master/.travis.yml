@@ -1,0 +1,96 @@
+sudo: false
+
+language: python
+
+cache:
+    directories:
+        - $HOME/miniconda
+        - $HOME/.bokeh
+        - $HOME/build/bokeh/bokeh/bokehjs/node_modules
+
+python:
+    - 2.7
+    - 3.4
+
+env:
+    global:
+        - MINICONDA_VERSION="latest"
+        - BOKEH_DEFAULT_TIMEOUT=30
+        - secure: "nLrUq2h59KN3k3hnid+Ub4RHDcVkZyrVmuMLoM6NbwKA0bwpDltaoSg5cj2dzdXKBwvv+3VP38oXLhEGLhVi7kDmyX3ICcza6Usy8zgK3s1NBgl6hFjqaJ7RjCu9OP1I42ThMTLfCQMRrYul7s74sGdZa+HfMCZcl+3Co5IzraI="
+        - secure: "oI7Up9HuHSBw8k9LBNC6pLEUJONj+5NeEGFpSLSVXvqPPmyXJZ4qRE/dZ/HxZp6xyBze5GLYmdXXAdhrZyNjmU1ZA0rbBLDWLXuAW8eJm5xAXZ0NRFlHMXMkwvbG9hPTOTFtxKNS4lG/Fo5AXwE4MgT5uzQS4I7HuuNkcZOoInY="
+        - secure: "AMKPTVrc2g8j5T40hQhdEGoiod+KCkbiseVSQRDPeeX1TvQoVjbrZenrWHyHEHKc1x3LavDuCBJ3sW9cLy+QF9sdudK/cc9+aG2Hax5dyapI0iaHlzvqYDO3aguQsZcu+pVEIVatoOSv25/282aPNtNXn403jmJvd0Qt8ch1jOw="
+        - secure: "v9VkMz6cjFBZhlf6iiXSr0o2Eo/HKMMOseAxE6H+sr1vbPg19edGU+7+aAQrn09lE4oKU5JwZSzQ2KalJgrNTGrRrGyEtWGAcuS6oP17zg9LsutLGptNwyHBnCvB5aUPW7JSNs+kor7CmvZ8sVnUh810YSREjt2ZsjEG3ysZjVc="
+        - secure: "OI9ErePcqSewA8ZheZq5YtNyeLA8UM1UGskcMEAmPMf9AisYasJaPoY8NeqLGDyMcg7TcXbFQBZv7jPEngZ3RZMsDajfC3p63WOBDS7PfurKTVWTXZ28Z6vzwa3riFIca3D0eVP6bt8KZrYMo7HvWQG3vzmTSxRjx4e2wHxciKo="
+    matrix:
+      - GROUP=js_tests
+      - GROUP=python_tests
+      - GROUP=integration_tests
+      - GROUP=examples_flake_docs
+
+branches:
+  only:
+    - master
+    - /^\d+.\d+.\d+dev\d+$/
+    - /^\d+.\d+.\d+rc\d+$/
+    - /^\d+.\d+.\d+$/
+
+before_install:
+    - export PATH="$HOME/miniconda/bin:$PATH"
+    - echo $TRAVIS_BUILD_NUMBER > __travis_build_number__.txt
+    # To actually run the examples you need to include the [ci enable examples] in your commit
+    # This allow you to quickly iterate on minimal changes and actually trigger the examples, on demand, when you need it
+    - "export TRAVIS_COMMIT_MSG=\"$(git log --format=%B --no-merges -n 1)\""
+    # Use xvfb to run tests that require firefox
+    # http://docs.travis-ci.com/user/gui-and-headless-browsers/#Using-xvfb-to-Run-Tests-That-Require-GUI-%28e.g.-a-Web-browser%29
+    - "export DISPLAY=:99.0"
+    - "sh -e /etc/init.d/xvfb start"
+
+install:
+    - scripts/travis_install
+
+script:
+    # Deactivate tests on building to avoid huge packages contaning the pics and outout html
+    # Eventually, we need to get rid of the generated stuff before packaging
+    - if [[ -z "$TRAVIS_TAG" && "$GROUP" == js_tests ]]; then py.test -s -m js -rs; fi  # Run just the JS first so we see the output
+    - if [[ -z "$TRAVIS_TAG" && "$GROUP" == python_tests ]]; then py.test -m 'not (examples or js or integration)' --cov=bokeh --cov-config=bokeh/.coveragerc -rs; fi  # Run the not examples or js tests (we can eat stdout for this one)
+    - if [[ -z "$TRAVIS_TAG" && "$GROUP" == integration_tests ]]; then py.test -m integration -rs; fi  # Run the integration tests
+    - if [[ -z "$TRAVIS_TAG" && "$GROUP" == examples_flake_docs && $TRAVIS_PYTHON_VERSION == '2.7' ]]; then export BOKEH_DEFAULT_DIFF=FETCH_HEAD; fi # Add env variable for pdiff machinery
+    - if [[ -z "$TRAVIS_TAG" && "$GROUP" == examples_flake_docs ]]; then if [[ $TRAVIS_COMMIT_MSG == *"[ci disable examples]"* ]]; then echo "Examples run disabled by commit"; else py.test -s -m examples -rs; fi; fi # Run the examples
+    - echo "poor man logger"
+    - echo $BOKEH_DEFAULT_DIFF; echo $TRAVIS_COMMIT_MSG; echo $TRAVIS_PULL_REQUEST
+    # Flake/style testing (only needed on one machine)
+    - if [[ -z "$TRAVIS_TAG" && "$GROUP" == examples_flake_docs && $TRAVIS_PYTHON_VERSION == '3.4' ]]; then flake8 bokeh; fi
+    - if [[ -z "$TRAVIS_TAG" && "$GROUP" == examples_flake_docs ]]; then ( cd sphinx; make all ) ; fi #Run docs
+
+after_success:
+    |
+    if [[ ! -z "$TRAVIS_TAG" && "$TRAVIS_PYTHON_VERSION" == '2.7'  ]]; then
+        #install some additional dependencies
+        conda install anaconda-client fabric --yes
+        #decrypt some files and place them in the correct location
+        openssl aes-256-cbc -K $encrypted_c19429b59af5_key -iv $encrypted_c19429b59af5_iv -in secrets.tar.enc -out secrets.tar -d
+        tar xvf secrets.tar
+        cp known_hosts ~/.ssh/known_hosts
+        cp .npmrc ~/.npmrc
+        cp .pypirc ~/.pypirc
+        chmod 600 bokeh_key
+        eval `ssh-agent -s`
+        ssh-add bokeh_key
+        #signal the correct build
+        if [[ "$TRAVIS_TAG" == *"dev"* ]] || [[ "$TRAVIS_TAG" == *"rc"* ]]; then
+          echo "Building a dev or rc package."
+          #we signal the devel build with the "devel" string into the __travis_build_number__.txt file
+          echo "devel" > __travis_build_number__.txt
+        else
+          echo "Building a release package."
+          #we signal the release with an the "release" string into the __travis_build_number__.txt file
+          echo "release" > __travis_build_number__.txt
+        fi
+        bash scripts/build_upload.sh -b $BINSTAR_TOKEN -u $RSUSER -k $RSAPIKEY
+    else
+        echo "Not building because there is no tag."
+    fi
+
+notifications:
+    flowdock:
+        secure: "ZisceYtV2b7LWNUz0wEtiR9TRk+i8x5m/N6+Htn4IFr+bBcBi79ESO0u6DWiJA5rHt+Yq7Yf49vl7UO9HZCF+8n5B1nKpfivJKngVuMYLnhYifNmwCD7vQ8aaF9DTfOqvm2hJrHwtieX8BUGs2KWd8igt3f8LCXVWVBBvkqc2L0="
