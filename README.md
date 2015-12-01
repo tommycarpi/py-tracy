@@ -4,9 +4,9 @@ Project for the course of Computer Systems Performance Evaluation on the Google 
 Dependencies
 ---
 For this project we used  <br>
-IPython Notebook <br>
-Spark <br>
-Bokeh <br> ([documentation](http://bokeh.pydata.org/en/latest/)
+[IPython](http://ipython.org) <br>
+[Spark](http://spark.apache.org)  <br>
+[Bokeh](http://bokeh.pydata.org/en/latest/) <br>
 I wrote a tutorial on how to [link IPython with Spark](https://gist.github.com/tommycarpi/f5a67c66a8f2170e263c) on OS X and Linux. 
 
 Anyway all the code will be provived both as '.ipybn' and '.py'.
