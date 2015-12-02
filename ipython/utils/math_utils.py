@@ -25,3 +25,8 @@ def mean_time_evaluation(sc, cluster_list):
     # Then we apply the mean() over all the values
     mean_value = numpy.mean(tuples_RDD.collect())
     return mean_value
+
+def get_interval_values(sc, cluster_list, init_time, finish_time):
+    tuples = calculate_tuples(cluster_list)
+    interval = map(lambda elem: (init_time, finish_time, elem[0], elem[1], elem[1]-elem[0]),tuples)
+    return interval
