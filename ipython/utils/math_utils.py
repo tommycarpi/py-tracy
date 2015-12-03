@@ -1,4 +1,5 @@
 import numpy
+import math
 # We define some useful functions that will be used later for our computation
 
 # Given a list of timestamps we create tuples containing each element and it's
@@ -30,3 +31,27 @@ def get_interval_values(sc, cluster_list, init_time, finish_time):
     tuples = calculate_tuples(cluster_list)
     interval = map(lambda elem: (init_time, finish_time, elem[0], elem[1], elem[1]-elem[0]),tuples)
     return interval
+
+def metrics(inter_list):
+    # 1. mean
+    # 2. variance
+    # 3. median
+    # 4. standard deviation
+    return [numpy.mean(inter_list), numpy.var(inter_list), numpy.median(inter_list), numpy.std(inter_list)]
+
+# In this function we unite all the calculated inter-arrivals that belong to the same cluster
+# i.e. to the same temporal slot defined by the granularity
+def evaluate_statistics(sc, interval_list):
+    interval_list_RDD = sc.parallelize(interval_list)
+    interval_list_RDD = interval_list_RDD.map(lambda elem:((elem[0], elem[1]), elem[4]))\
+        .groupByKey()\
+        .sortByKey(1,1)\
+        .map(lambda elem: (elem[0][0], elem[0][1], metrics(list(elem[1]))))
+        
+    return interval_list_RDD.collect()
+
+def removeNans(evaluated_means_list):
+    for elem in evaluated_means_list:
+        if math.isnan(elem[2]):
+            elem[2] = 0
+    return evaluated_means_list
