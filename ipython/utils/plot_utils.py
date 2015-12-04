@@ -1,6 +1,5 @@
 from bokeh.plotting import figure, show, output_file
 from bokeh.io import output_notebook
-output_notebook()
 
 # Function to plot some values calculated over the single clusters
 def plot_metrics(metrics_list):
