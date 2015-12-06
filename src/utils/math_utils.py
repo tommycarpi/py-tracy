@@ -55,3 +55,50 @@ def removeNans(evaluated_means_list):
         if math.isnan(elem[2]):
             elem[2] = 0
     return evaluated_means_list
+
+# Transform time into microseconds
+def adjust_values(init_time, finish_time, granularity):
+    init_time = init_time*10**6
+    finish_time = finish_time*10**6
+    granularity = granularity*10**6
+    return init_time, finish_time, granularity
+
+# ** Parameters evaluation **
+# The following functions evaluate the input (day number) given by the user and covert it
+# in seconds in order to evaluate the traces
+
+def get_day_function_parameters(day):
+    if day > 30:
+        print "Error, exceeded month length (30 days)"
+        return None,None
+    else:
+        # Define parameters for the function
+        init_time = 0
+        finish_time = 0
+        if day != 1:
+            init_time = 18000 + (day-2) * 86400
+            finish_time = 18000 + (day-1) * 86400 - 1     
+        else:
+            init_time = 0
+            finish_time = 18000
+        # Return the computed values
+        return init_time, finish_time
+    
+def get_days_function_parameters(init_day, finish_day):
+    if init_day > finish_day:
+        print "Error, init day must be previous finish day"
+        return None,None
+    elif init_day > 30 or finish_day > 30:
+        print "Error, exceeded month length (30 days)"
+        return None,None
+    else:
+        # Define parameters for the function
+        init_time = 0
+        finish_time = 0
+        if init_day != 1:
+            init_time = 18000 + (init_day-2) * 86400
+            finish_time = 18000 + (finish_day-1) * 86400 - 1   
+        else:
+            init_time = 0
+            finish_time = 18000 + (finish_day-1) * 86400 - 1
+        return init_time, finish_time
