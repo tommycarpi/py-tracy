@@ -1,32 +1,30 @@
-# CSPE Project on Google traces
-Project for the course of *Computer Systems Performance Evaluation* @ Politecnico of Milan. <br>
+# Py-Tracy
+Py-tracy evaluates the inter-arrivals times between logs applying different filters based on the user input. <br>
+The logs comes from the Google's traces *clusterdata-2011-2* (available on Google Storage) for ```job_events``` and ```task_events```. <br>
+Py-tracy was created furing the course of *Computer Systems Performance Evaluation* @ Politecnico of Milan. <br>
 This repository contains the code used to analyse the data provided by Google.
 
 Dependencies
----
+===
 For this project we used  <br>
 [IPython](http://ipython.org) <br>
 [Spark](http://spark.apache.org)  <br>
 [Bokeh](http://bokeh.pydata.org/en/latest/) <br>
 I wrote a tutorial on how to [link IPython with Spark](https://gist.github.com/tommycarpi/f5a67c66a8f2170e263c) on OS X and Linux. 
 
-Activity
----
-For this project we were assigned to analyse the Google's traces 'clusterdata-2011-2' (available on Google Storage) for ```job_events``` and ```task_events```.
-
 Usage
----
+===
 Up to now the code is available only as ```ipynb```, so you need to open the source file with IPython. <br>
 The traces contain data starting from the 1st of May 2011 19 EDT until the 30th of May 2011. <br>
 **Important:** many parameters may be set to filter the traces, in any case (except time parameters) you can type ```None``` and no filter will be applied, e.g. ```j_eval_day(None, 2, 3600)``` will evaluate traces with any ```event_type```
 
-Usage: Job Events 
+Job Events 
 ---
 Open the ```inter_arrival_jobs``` file and run all the cells till the ```**Usage**``` section. <br>
 After that you can call the function to start the computation. <br>
 
 ```
-# j_eval_day(event_type, day, granularity)
+// j_eval_day(event_type, day, granularity)
 j_eval_day(0, 2, 3600)
 ```
 
@@ -35,7 +33,7 @@ j_eval_day(0, 2, 3600)
 * ```granularity``` : interval at which you want to perfom the evaluation (expressed in seconds!), e.g. 3600 will evaluate the model at intervals of 1 hour 
 
 ```
-# j_eval_days(event_type, init_day, finish_day, granularity)
+// j_eval_days(event_type, init_day, finish_day, granularity)
 j_eval_days(0, 2, 5, 3600)
 ```
 
@@ -47,7 +45,7 @@ j_eval_days(0, 2, 5, 3600)
 If you wish you could also select periods of time which are not day or days
 
 ```
-# j_eval_time_window(event_type, init_time, finish_time, granularity)
+// j_eval_time_window(event_type, init_time, finish_time, granularity)
 j_eval_time_window(0, 600, 86400, 3600)
 ```
 
@@ -57,14 +55,14 @@ j_eval_time_window(0, 600, 86400, 3600)
 * ```granularity``` : interval at which you want to perfom the evaluation (expressed in seconds!), e.g. 3600 will evaluate the model at intervals of 1 hour 
 
 
-Usage: Task Events 
+Task Events 
 ---
 
 Open the ```inter_arrival_tasks``` file and run all the cells till the ```**Usage**``` section. <br>
 After that you can call the function to start the computation. <br>
 
 ```
-# t_eval_day(event_type, machine_ID, job_ID, day, granularity)
+// t_eval_day(event_type, machine_ID, job_ID, day, granularity)
 t_eval_day(0, 2, 3600)
 ```
 
@@ -75,7 +73,7 @@ t_eval_day(0, 2, 3600)
 * ```granularity``` : interval at which you want to perfom the evaluation (expressed in seconds!), e.g. 3600 will evaluate the model at intervals of 1 hour 
 
 ```
-# t_eval_days(event_type, machine_ID, job_ID, init_day, finish_day, granularity)
+// t_eval_days(event_type, machine_ID, job_ID, init_day, finish_day, granularity)
 t_eval_days(0, 1, 1, 2, 5, 3600)
 ```
 
@@ -89,7 +87,7 @@ t_eval_days(0, 1, 1, 2, 5, 3600)
 If you wish you could also select periods of time which are not day or days
 
 ```
-# t_eval_time_window(event_type, machine_ID, job_ID, init_time, finish_time, granularity)
+// t_eval_time_window(event_type, machine_ID, job_ID, init_time, finish_time, granularity)
 t_eval_time_window(0, 1, 1, 600, 86400, 3600)
 ```
 
