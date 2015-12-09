@@ -16,7 +16,11 @@ Usage
 ===
 Up to now the code is available only as ```ipynb```, so you need to open the source file with IPython. <br>
 The traces contain data starting from the 1st of May 2011 19 EDT until the 30th of May 2011. <br>
-**Important:** many parameters may be set to filter the traces, in any case (except time parameters) you can type ```None``` and no filter will be applied, e.g. ```j_eval_day(None, 2, 3600)``` will evaluate traces with any ```event_type```
+**Important:** many parameters may be set to filter the traces, in any case (except time parameters) you can type ```None``` and no filter will be applied. 
+```python
+j_eval_day(None, 2, 3600)
+``` 
+will evaluate traces with any ```event_type```.
 
 Job Events 
 ---
