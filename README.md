@@ -23,8 +23,8 @@ Job Events
 Open the ```inter_arrival_jobs``` file and run all the cells till the ```**Usage**``` section. <br>
 After that you can call the function to start the computation. <br>
 
-```
-// j_eval_day(event_type, day, granularity)
+```python
+# j_eval_day(event_type, day, granularity)
 j_eval_day(0, 2, 3600)
 ```
 
@@ -32,8 +32,8 @@ j_eval_day(0, 2, 3600)
 * ```day``` : day you wish to evaluate, e.g. 2 correspond to the 2nd of May from 0:00 until 23:59
 * ```granularity``` : interval at which you want to perfom the evaluation (expressed in seconds!), e.g. 3600 will evaluate the model at intervals of 1 hour 
 
-```
-// j_eval_days(event_type, init_day, finish_day, granularity)
+```python
+# j_eval_days(event_type, init_day, finish_day, granularity)
 j_eval_days(0, 2, 5, 3600)
 ```
 
@@ -44,8 +44,8 @@ j_eval_days(0, 2, 5, 3600)
 
 If you wish you could also select periods of time which are not day or days
 
-```
-// j_eval_time_window(event_type, init_time, finish_time, granularity)
+```python
+# j_eval_time_window(event_type, init_time, finish_time, granularity)
 j_eval_time_window(0, 600, 86400, 3600)
 ```
 
@@ -61,8 +61,8 @@ Task Events
 Open the ```inter_arrival_tasks``` file and run all the cells till the ```**Usage**``` section. <br>
 After that you can call the function to start the computation. <br>
 
-```
-// t_eval_day(event_type, machine_ID, job_ID, day, granularity)
+```python
+# t_eval_day(event_type, machine_ID, job_ID, day, granularity)
 t_eval_day(0, 2, 3600)
 ```
 
@@ -72,8 +72,8 @@ t_eval_day(0, 2, 3600)
 * ```day``` : day you wish to evaluate, e.g. 2 correspond to the 2nd of May from 0:00 until 23:59
 * ```granularity``` : interval at which you want to perfom the evaluation (expressed in seconds!), e.g. 3600 will evaluate the model at intervals of 1 hour 
 
-```
-// t_eval_days(event_type, machine_ID, job_ID, init_day, finish_day, granularity)
+```python
+# t_eval_days(event_type, machine_ID, job_ID, init_day, finish_day, granularity)
 t_eval_days(0, 1, 1, 2, 5, 3600)
 ```
 
@@ -86,8 +86,8 @@ t_eval_days(0, 1, 1, 2, 5, 3600)
 
 If you wish you could also select periods of time which are not day or days
 
-```
-// t_eval_time_window(event_type, machine_ID, job_ID, init_time, finish_time, granularity)
+```python
+# t_eval_time_window(event_type, machine_ID, job_ID, init_time, finish_time, granularity)
 t_eval_time_window(0, 1, 1, 600, 86400, 3600)
 ```
 
