@@ -102,3 +102,19 @@ t_eval_time_window(0, 1, 1, 600, 86400, 3600)
 * ```finish_time``` : time you wish to end the evaluation (in seconds!)
 * ```granularity``` : interval at which you want to perfom the evaluation (expressed in seconds!), e.g. 3600 will evaluate the model at intervals of 1 hour 
 
+Output
+---
+Py-tracy outputs a csv file containing the processed traces in this format
+```
+init_time,finish_time,timestamp_1,timestamp_2,inter_time
+```
+* ```init_time``` and ```finish_time```: they are time values considered with respect to the granularity, for example if we consider a granularity of 1 hour (3600 seconds) over the 2nd of May, those values will be ```0:00 am - 1:00 am```, ```1:00 am - 2:00 am``` and so on (in seconds).
+* ```timestamp_1``` and ```timestamp_2```: those represent 2 subsequent logs in the traces, used to evaluate the inter-arrival rate.
+* ```inter time```: the computed inter-arrival time
+
+and it also outputs some graphs showing the computed inter-arrival values. <br>
+Those graphs represents:
+* Mean  
+* Variance
+* Median
+* Standart Variation
