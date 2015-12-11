@@ -27,11 +27,10 @@ def plot_custom_metrics(sc, metrics_list, metric_id, trace_id, x_label, y_label,
     # Prepare dataset for plotting
     metrics_list_RDD = sc.parallelize(metrics_list)
     x_axis = metrics_list_RDD.map(lambda elem: (elem[0]+elem[1])/2e+6).collect()
-    y_axis = metrics_list_RDD.map(lambda elem: elem[2]).collect()
     
     # Plot the graphs
     p = figure(title="Metrics on "+str(trace_id)+" events", x_axis_label=x_label, y_axis_label=y_label)
-    p.line(x_axis, metrics_list_RDD.map(lambda elem: elem[2][metric_id]).collect(), line_width=1.5, line_color=color)
+    p.line(x_axis, metrics_list_RDD.map(lambda elem: elem[2][metric_id]/1e+6).collect(), line_width=1.5, line_color=color)
     
     # Show the results
     show(p)

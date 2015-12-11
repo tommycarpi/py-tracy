@@ -3,7 +3,10 @@ def create_sub_row(elem):
     return str(elem[0]) + "," + str(elem[1]) + "," + str(elem[2]) + "," + str(elem[3]) + "," + str(elem[4])
 
 def write_csv(interval_list, event_type, init_time, finish_time, granularity):
-    f = open("../csv/jobs_intervals_"+str(event_type)+"_"+str(init_time)+"_"+str(finish_time)+"_@"+str(granularity),'w')
+    init_time = init_time * 10**(-6)
+    finish_time = finish_time * 10**(-6)
+    granularity = granularity * 10**(-6)
+    f = open("../csv/jobs_intervals_"+str(event_type)+"_"+str(int(init_time))+"_"+str(int(finish_time))+"_@"+str(int(granularity)),'w')
     f.write("init_time,finish_time,timestamp_1,timestamp_2,inter_time\n") # write csv header
     
     for element in interval_list:
