@@ -114,7 +114,7 @@ init_time,finish_time,timestamp_1,timestamp_2,inter_time
 
 The name of the csv in written in this format
 ```
-jobs_intervals_event_type_init_time_finish_time_@granularity
+jobs_intervals_event-type_init-time_finish-time_@granularity.csv
 ```
 and it also outputs some graphs showing the computed inter-arrival values. <br>
 Those graphs represents:
