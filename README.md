@@ -111,7 +111,7 @@ Those graphs represents:
 * Median
 * Standart Variation
 
-job events csv format
+Job events csv format
 ---
 ```
 init_time,finish_time,timestamp_1,timestamp_2,inter_time
@@ -125,7 +125,7 @@ The name of the csv in written in this format
 jobs_intervals_event-type_init-time_finish-time_@granularity.csv
 ```
 
-task events csv format
+Task events csv format
 ---
 ```
 init_time,finish_time,timestamp_1,timestamp_2,inter_time
