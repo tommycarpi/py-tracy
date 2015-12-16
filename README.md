@@ -24,7 +24,7 @@ will evaluate traces with any ```event_type```.
 
 Job Events 
 ---
-Open the ```inter_arrival_jobs``` file and run all the cells till the ```**Usage**``` section. <br>
+Open the ```inter_arrival_jobs``` file and run all the cells till the **Usage** section. <br>
 After that you can call the function to start the computation. <br>
 
 ```python
@@ -62,7 +62,7 @@ j_eval_time_window(0, 600, 86400, 3600)
 Task Events 
 ---
 
-Open the ```inter_arrival_tasks``` file and run all the cells till the ```**Usage**``` section. <br>
+Open the ```inter_arrival_tasks``` file and run all the cells till the **Usage** section. <br>
 After that you can call the function to start the computation. <br>
 
 ```python
