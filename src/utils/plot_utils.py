@@ -9,7 +9,7 @@ def plot_metrics(metrics_list):
     y_axis = metrics_list_RDD.map(lambda elem: elem[2]).collect()
     
     # Plot the graphs
-    p = figure(title="Metrics on job events", x_axis_label='Time Window (seconds)', y_axis_label='Mean Time (seconds)')
+    p = figure(title="Metrics on job events", x_axis_label='Time(seconds)', y_axis_label='Mean Time (seconds)')
     # Mean
     #p.line(x_axis, metrics_list_RDD.map(lambda elem: elem[2][0]).collect(), line_width=1.5, line_color="orange")
     # Variance
@@ -43,7 +43,7 @@ def plot_inter_arrivals(sc, evaluated_means_list, mean_time_whole_period):
     y_axis = evaluated_means_RDD.map(lambda elem: elem[2]/1e+6).collect()
     
     # Plot the graphs
-    p = figure(title="Mean inter-arrival time", x_axis_label='Time Window (seconds)', y_axis_label='Mean Time (seconds)')
+    p = figure(title="Mean inter-arrival time", x_axis_label='Time (seconds)', y_axis_label='Mean Time (seconds)')
     p.line(x_axis, y_axis, line_width=1.5, line_color="orange")
     p.ray(x=x_axis[0],y=mean_time_whole_period/1e+6,length=x_axis[len(x_axis)-1]-x_axis[0], angle=0, line_color="red")
     p.circle(x_axis, y_axis, size=3, legend="Time", line_color="red", fill_color="red", fill_alpha=1.0)
