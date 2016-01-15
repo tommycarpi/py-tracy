@@ -29,7 +29,7 @@ def mean_time_evaluation(sc, cluster_list):
 
 def get_interval_values(sc, cluster_list, init_time, finish_time):
     tuples = calculate_tuples(cluster_list)
-    interval = map(lambda elem: (init_time, finish_time, elem[0], elem[1], elem[1]-elem[0]),tuples)
+    interval = map(lambda elem: (init_time, finish_time, elem[0], elem[1], (elem[1]-elem[0])/10**6),tuples)
     return interval
 
 def metrics(inter_list):
@@ -37,7 +37,10 @@ def metrics(inter_list):
     # 2. variance
     # 3. median
     # 4. standard deviation
-    return [numpy.mean(inter_list), numpy.var(inter_list), numpy.median(inter_list), numpy.std(inter_list)]
+    if inter_list.count > 0:
+        return [numpy.mean(inter_list), numpy.var(inter_list), numpy.median(inter_list), numpy.std(inter_list)]
+    else:
+        return [0,0,0,0]
 
 # In this function we unite all the calculated inter-arrivals that belong to the same cluster
 # i.e. to the same temporal slot defined by the granularity
