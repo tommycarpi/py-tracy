@@ -27,6 +27,17 @@ def mean_time_evaluation(sc, cluster_list):
     mean_value = numpy.mean(tuples_RDD.collect())
     return mean_value
 
+def global_metrics(sc, cluster_list):
+    tuples = calculate_tuples(cluster_list)
+    # Transform the array into an RDD for faster computation
+    tuples_RDD = sc.parallelize(tuples)
+    # Create an RDD such that the resulting element is the subtraction between the
+    # 2 element of the tuples in reverse order.
+    # This operation will return the time passed between the 2 different logs
+    tuples_RDD = tuples_RDD.map(lambda elem: ((elem[1]-elem[0])/10**6))
+    tuples_list = tuples_RDD.collect()
+    return [numpy.mean(tuples_list), numpy.var(tuples_list), numpy.median(tuples_list), numpy.std(tuples_list)]
+
 def get_interval_values(sc, cluster_list, init_time, finish_time):
     tuples = calculate_tuples(cluster_list)
     interval = map(lambda elem: (init_time, finish_time, elem[0], elem[1], (elem[1]-elem[0])/10**6),tuples)

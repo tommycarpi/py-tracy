@@ -9,7 +9,7 @@ def plot_metrics(metrics_list):
     y_axis = metrics_list_RDD.map(lambda elem: elem[2]).collect()
     
     # Plot the graphs
-    p = figure(title="Metrics on job events", x_axis_label='Time(seconds)', y_axis_label='Mean Time (seconds)')
+    p = figure(title="Metrics on job events", x_axis_label='Time(sec)', y_axis_label='Mean Inter-arrival Time(sec)')
     # Mean
     #p.line(x_axis, metrics_list_RDD.map(lambda elem: elem[2][0]).collect(), line_width=1.5, line_color="orange")
     # Variance
@@ -29,12 +29,15 @@ def plot_custom_metrics(sc, metrics_list, metric_id, trace_id, x_label, y_label,
     x_axis = metrics_list_RDD.map(lambda elem: (elem[0]+elem[1])/2e+6).collect()
     
     # Plot the graphs
-    p = figure(title="Metrics on "+str(trace_id)+" events", x_axis_label=x_label, y_axis_label=y_label)
-    p.line(x_axis, metrics_list_RDD.map(lambda elem: elem[2][metric_id]/1e+6).collect(), line_width=1.5, line_color=color)
+    p = figure(title="", x_axis_label=x_label, y_axis_label=y_label)
+    p.line(x_axis, metrics_list_RDD.map(lambda elem: elem[2][metric_id]).collect(), line_width=1.5, line_color=color)
     
     # Show the results
     show(p)
     
+def getHourOfDay(timestamp):
+    hours_passed = timestamp/60
+    return (hours_passed % 24)
     
 def plot_inter_arrivals(sc, evaluated_means_list, mean_time_whole_period):
     # Prepare dataset for plotting
